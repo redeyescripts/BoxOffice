@@ -1,0 +1,85 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace BoxOffice
+{
+    class Program
+    {
+        class Movie
+        {
+            int id;
+            string title;
+            long lifeTimeGross;
+            private List<Movie> movies;
+            private int totalLifeGross;
+
+            public Movie(int _id, string _title, long _lifeTimeGross)
+            {
+                id = _id;
+                title = _title;
+                lifeTimeGross = _lifeTimeGross;
+
+            }
+            public int Id { get { return id; } }
+            public string Title { get { return title; } }
+            public long LifeTimeGross { get { return lifeTimeGross; } }
+
+        }
+        class MovieList
+        {
+
+            List<Movie> movies;
+            long totalLifeGross;
+
+            public MovieList()
+            {
+                movies = new List<Movie>();
+                totalLifeGross = 0;
+
+            }
+
+            public void AddMoviesToList(int id, string title, long gross)
+            {
+                Movie newMovie = new Movie(id, title, gross);
+                movies.Add(newMovie);
+            }
+            public void PrintAllMovies()
+            {
+                foreach (Movie movie in movies)
+
+                    Console.WriteLine($"{movie.Id},{movie.Title},{movie.LifeTimeGross}");
+            }
+        
+    
+
+
+
+          
+            
+        }
+        static void Main(string[] args)
+        {
+            string filePath = @"C:\Users\opilane\samples";
+            string fileName = @"BoxOffice.txt";
+            string fullfilePath = Path.Combine(filePath, fileName);
+            string[] ReadlinesFromFile = File.ReadAllLines(fullfilePath);
+            MovieList myMovies = new MovieList();
+            foreach (string line in ReadlinesFromFile)
+            {
+                // Use a tab to indent each line of the file.
+                Console.WriteLine(line);
+                string[] tempArray = line.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                int moveId = int.Parse(tempArray[0]);
+                string movieTitle = tempArray[1];
+                string totalGrossTemp = tempArray[2].Substring(1);
+                Console.WriteLine(totalGrossTemp);
+
+
+                long movieGross = long.Parse(totalGrossTemp);
+                myMovies.AddMoviesToList(moveId, movieTitle, movieGross);
+            }
+            
+        }
+    }
+}
